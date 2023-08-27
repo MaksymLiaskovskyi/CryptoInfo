@@ -1,0 +1,76 @@
+﻿<Window x:Class="CryptoInfo.View.CurrencyInfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CryptoInfo.View"
+        xmlns:vm="clr-namespace:CryptoInfo.ViewModel"
+        mc:Ignorable="d"
+        Title="CurrencyInfoWindow" Height="450" Width="800"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+    </Window.Resources>
+    <Window.DataContext>
+        <vm:CurrencyViewModel/>
+    </Window.DataContext>
+    <Grid VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="225px" Width="0.35*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0" x:Name="NameTextBlock" FontSize="20"/>
+        <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal">
+            <TextBlock x:Name="PriceTextBlock" Margin="0,0,8,0"/>
+            <TextBlock x:Name="ChangesTextBlock"/>
+        </StackPanel>
+        <TextBlock Grid.Column="0" Grid.Row="2" Text="Капіталізація:"/>
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="Грошова пропозиція:"/>
+        <TextBlock Grid.Column="1" Grid.Row="2" x:Name="MarketCapTextBlock"/>
+        <TextBlock Grid.Column="1" Grid.Row="3" x:Name="SupplyTextBlock"/>
+        <TextBlock Grid.Column="0" Grid.Row="4" Text="Ринки:"/>
+        <ListBox HorizontalContentAlignment="Stretch" Grid.Row="5" Grid.Column="0" ItemsSource="{Binding Markets}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0" Width="auto">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding ExchangeId}"/>
+                                <TextBlock Grid.Column="1" >
+                                    <Run Text="$"/>
+                                    <Run Text="{Binding PriceUsd, StringFormat=0.####}"/>
+                                </TextBlock>
+                            </Grid>
+                        <TextBlock Grid.Row="1">
+                            <Run Text="{Binding BaseSymbol}"/>
+                            <Run Text="/"/>
+                            <Run Text="{Binding QuoteSymbol}"/>
+                        </TextBlock>
+                        </Grid>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>
