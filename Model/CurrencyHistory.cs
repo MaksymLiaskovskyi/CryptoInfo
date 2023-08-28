@@ -13,10 +13,10 @@ namespace CryptoInfo.Model
     public class CurrencyHistory: INotifyPropertyChanged
     {
         private double priceUsd;
-        [JsonConverter(typeof(UnixToDateTimeConverter))]
         private DateTime time;
 
         public double PriceUsd { get { return priceUsd; } set { priceUsd = value; OnPropertyChanged("PriceUsd"); } }
+        [JsonConverter(typeof(UnixToDateTimeConverter))]
         public DateTime Time { get { return time; } set { time = value; OnPropertyChanged("Time"); } }
 
         public event PropertyChangedEventHandler PropertyChanged;

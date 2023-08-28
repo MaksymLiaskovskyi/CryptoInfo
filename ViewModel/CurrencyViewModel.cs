@@ -1,5 +1,8 @@
 ﻿using CryptoInfo.Model;
 using CryptoInfo.View;
+using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,7 +19,16 @@ namespace CryptoInfo.ViewModel
         public ObservableCollection<Currency> Currencies { get; set; } = new ObservableCollection<Currency>();
         public ObservableCollection<CurrencyMarket> Markets { get; set; } = new ObservableCollection<CurrencyMarket>();
         public ObservableCollection<CurrencyHistory> History { get; set; } = new ObservableCollection<CurrencyHistory>();
-
+        private SeriesCollection currencyHistorySeries;
+        public SeriesCollection CurrencyHistorySeries
+        {
+            get { return currencyHistorySeries; }
+            set
+            {
+                currencyHistorySeries = value;
+                OnPropertyChanged("CurrencyHistorySeries");
+            }
+        }
         private RelayCommand openInfoCommand;
         public RelayCommand OpenInfoCommand
         {
@@ -114,7 +126,7 @@ namespace CryptoInfo.ViewModel
 
                 currencyMarketData = JsonConvert.DeserializeObject<CurrencyMarketData>(responseBody);
 
-                if(Markets != null)
+                if(currencyMarketData != null)
                 {
                     foreach(var market in currencyMarketData.Data)
                     {
@@ -143,9 +155,28 @@ namespace CryptoInfo.ViewModel
                     {
                         History.Add(h);
                     }
+
+                    CurrencyHistorySeries = new SeriesCollection
+                    {
+                        new LineSeries
+                        {
+                            Title = "Price",
+                            Values = new ChartValues<double>(GetObservablePoints(History))
+                        }
+                    };
                 }
             }
 
+        }
+
+        private ObservableCollection<double> GetObservablePoints(ObservableCollection<CurrencyHistory> history)
+        {
+            var points = new ObservableCollection<double>();
+            foreach (var item in history)
+            {
+                points.Add(item.PriceUsd);
+            }
+            return points;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -52,6 +52,7 @@ namespace CryptoInfo.View
                     { "interval", "h1" }
                 };
                 viewModel.InitCurrencyHistory.Execute(args);
+                
             }
         }
     }
